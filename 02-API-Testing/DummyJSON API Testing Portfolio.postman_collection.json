@@ -1,0 +1,334 @@
+{
+  "info": {
+    "_postman_id": "4c8785ad-3c9b-45e9-b553-35841c12dc24",
+    "name": "DummyJSON API Testing Portfolio",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "60163722"
+  },
+  "item": [
+    {
+      "name": "GET - Get All Products",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/products",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "products"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "GET - Get Product by ID",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/products/1",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "products",
+            "1"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "GET - Get Products with Limit",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"Status code is 200\", function () {\n    pm.response.to.have.status(200);\n});\n\npm.test(\"Response is JSON\", function () {\n    pm.response.to.be.json;\n});\n\nconst response = pm.response.json();\n\npm.test(\"Response is an array\", function() {\n    pm.expect(response.products).to.be.an('array');\n})\n\npm.test(\"Products contains 10 items\", function () {\n    pm.expect(response.products).to.have.lengthOf(10);\n});\n\npm.test(\"Total products is 194\", function () {\n    pm.expect(response.total).to.eql(194);\n});\n\npm.test(\"Skip is 0\", function () {\n    pm.expect(response.skip).to.eql(0);\n});\n\npm.test(\"Limit is 10\", function () {\n    pm.expect(response.limit).to.eql(10);\n});"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/products?limit=10&skip=0",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "products"
+          ],
+          "query": [
+            {
+              "key": "limit",
+              "value": "10"
+            },
+            {
+              "key": "skip",
+              "value": "0"
+            }
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "GET - Get Non-Existing Product",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"Status code is 404\", function () {\n    pm.response.to.have.status(404);\n});\n\npm.test(\"Response is JSON\", function () {\n    pm.response.to.be.json;\n});\n\nconst response = pm.response.json();\n\npm.test(\"Error message exists\", function () {\n    pm.expect(response).to.have.property(\"message\");\n});\n\npm.test(\"Error message indicates product not found\", function () {\n    pm.expect(response.message.toLowerCase()).to.include(\"not found\");\n});"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/products/99999",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "products",
+            "99999"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "GET - Boundary Limit 1",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "\npm.test(\"Status code is 200\", function () {\n    pm.response.to.have.status(200);\n});\n\npm.test(\"Response is JSON\", function () {\n    pm.response.to.be.json;\n});\n\nconst response = pm.response.json();\n\npm.test(\"Products is an array\", function () {\n    pm.expect(response.products).to.be.an(\"array\");\n});\n\npm.test(\"Only one product is returned\", function () {\n    pm.expect(response.products).to.have.lengthOf(1);\n});\n\npm.test(\"Limit is 1\", function () {\n    pm.expect(response.limit).to.eql(1);\n});\n"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/products?limit=1",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "products"
+          ],
+          "query": [
+            {
+              "key": "limit",
+              "value": "1"
+            }
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "GET - Boundary Limit 0",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/products?limit=0",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "products"
+          ],
+          "query": [
+            {
+              "key": "limit",
+              "value": "0"
+            }
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "GET - Boundary Limit 200",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/products?limit=200",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "products"
+          ],
+          "query": [
+            {
+              "key": "limit",
+              "value": "200"
+            }
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "POST - Add New Product",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "\npm.test(\"Status code is 201\", function () {\n    pm.response.to.have.status(201);\n});\n\npm.test(\"Response is JSON\", function () {\n    pm.response.to.be.json;\n});\n\nconst response = pm.response.json();\n\npm.test(\"Product ID exists\", function () {\n    pm.expect(response).to.have.property(\"id\");\n});\n\npm.test(\"Product title is correct\", function () {\n    pm.expect(response.title).to.eql(\"QA Testing Product\");\n});\n\npm.test(\"Product price is correct\", function () {\n    pm.expect(response.price).to.eql(150);\n});\n\npm.test(\"Product category is correct\", function () {\n    pm.expect(response.category).to.eql(\"beauty\");\n});\n\npm.test(\"Product stock is correct\", function () {\n    pm.expect(response.stock).to.eql(50);\n});\n"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n    \"title\": \"QA Testing Product\",\n    \"description\": \"Product created for API testing practice\",\n    \"price\": 150,\n    \"category\": \"beauty\",\n    \"stock\": 50\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{baseUrl}}/products/add",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "products",
+            "add"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "PUT - Update Product",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "\npm.test(\"Status code is 200\", function () {\n    pm.response.to.have.status(200);\n});\n\npm.test(\"Response is JSON\", function () {\n    pm.response.to.be.json;\n});\n\nconst response = pm.response.json();\n\npm.test(\"Product ID is correct\", function () {\n    pm.expect(response.id).to.eql(1);\n});\n\npm.test(\"Product title is updated\", function () {\n    pm.expect(response.title).to.eql(\"Updated QA Testing Product\");\n});\n\npm.test(\"Product price is updated\", function () {\n    pm.expect(response.price).to.eql(250);\n});\n\npm.test(\"Product category is correct\", function () {\n    pm.expect(response.category).to.eql(\"beauty\");\n});\n\npm.test(\"Product stock is updated\", function () {\n    pm.expect(response.stock).to.eql(75);\n});\n"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "PUT",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n    \"title\": \"Updated QA Testing Product\",\n    \"description\": \"Product updated using PUT method\",\n    \"price\": 250,\n    \"category\": \"beauty\",\n    \"stock\": 75\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{baseUrl}}products/1",
+          "host": [
+            "{{baseUrl}}products"
+          ],
+          "path": [
+            "1"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "PATCH - Partially Update Product",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"Status code is 200\", function () {\n    pm.response.to.have.status(200);\n});\n\npm.test(\"Response is JSON\", function () {\n    pm.response.to.be.json;\n});\n\nconst response = pm.response.json();\n\npm.test(\"Product ID is correct\", function () {\n    pm.expect(response.id).to.eql(1);\n});\n\npm.test(\"Product price is updated\", function () {\n    pm.expect(response.price).to.eql(300);\n});\n\npm.test(\"Product title exists\", function () {\n    pm.expect(response.title).to.be.a(\"string\").and.not.empty;\n});\n\npm.test(\"Product category exists\", function () {\n    pm.expect(response.category).to.be.a(\"string\").and.not.empty;\n});\n\npm.test(\"Product stock exists\", function () {\n    pm.expect(response.stock).to.be.a(\"number\");\n});"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "PATCH",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n    \"price\": 300\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{baseUrl}}/products/1",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "products",
+            "1"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "DELETE - Delete Product",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"Status code is 200\", function () {\n    pm.response.to.have.status(200);\n});\n\npm.test(\"Response is JSON\", function () {\n    pm.response.to.be.json;\n});\n\nconst response = pm.response.json();\n\npm.test(\"Product ID is correct\", function () {\n    pm.expect(response.id).to.eql(1);\n});\n\npm.test(\"Product is marked as deleted\", function () {\n    pm.expect(response.isDeleted).to.eql(true);\n});\n\npm.test(\"Deleted date exists\", function () {\n    pm.expect(response).to.have.property(\"deletedOn\");\n});\n\npm.test(\"Deleted date is not empty\", function () {\n    pm.expect(response.deletedOn).to.be.a(\"string\").and.not.empty;\n});\n\npm.test(\"Product title exists\", function () {\n    pm.expect(response.title).to.be.a(\"string\").and.not.empty;\n});"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "DELETE",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/products/1",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "products",
+            "1"
+          ]
+        }
+      },
+      "response": []
+    }
+  ]
+}
